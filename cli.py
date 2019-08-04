@@ -64,3 +64,9 @@ def main(args=None):
     view = view_class()
     controller = controller_class(command_parser, view)
     controller.main(extra_args)
+
+
+# Script
+
+if __name__ is '__main__':
+    main()
