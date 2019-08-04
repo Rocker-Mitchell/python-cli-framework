@@ -2,11 +2,11 @@
 
 # Imports
 
-import lib.directory as d
+import lib.directory as directory
 
 
 # Constants
 
 DIRECTORIES = [
-    d.Directory('example')
+    directory.Directory('example')
 ]
