@@ -10,8 +10,8 @@ class Controller:
         """Initialize object.
 
         Args:
-            parser (ArgumentParser): The parser for the controller.
-            view (View): The view for the controller.
+            parser (argparse.ArgumentParser): The parser for the controller.
+            view (lib.view.View): The view for the controller.
         """
         self.parser = parser
         self.view = view
