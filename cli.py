@@ -35,8 +35,8 @@ def main(args=None):
     # attempt to import the parsed command
     directory, command_parser = commands[namespace.command]
     try:
-        controller_module = importlib.import_module('.' + directory.controller_module_name(), 'controllers')
-        view_module = importlib.import_module('.' + directory.view_module_name(), 'views')
+        controller_module = importlib.import_module('controllers.' + directory.controller_module_name())
+        view_module = importlib.import_module('views.' + directory.view_module_name())
     except ModuleNotFoundError:
         error = errormessages.attr_error('<command>', 'could not import modules for command', namespace.command,
                                          "the module files may not have been created, or the module names don't match "
