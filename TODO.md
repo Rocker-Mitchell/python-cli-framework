@@ -1,7 +1,7 @@
 # Bootstrap file
 
-- [ ] library
-    - [ ] directory class
+- [x] library
+    - [x] directory class
         - organize/format command name, module/class names, and help dialog for `argparse`
     - [ ] controller base class
         - template for subclass controllers
@@ -10,11 +10,11 @@
         - template for subclass views
         - method to set attributes used in view
 
-- [ ] config file directory.py
+- [x] config file directory.py
     - holding list of directory objects
 
-- [ ] bootstrap file cli.py
-    - [ ] partial parse to determine command
+- [x] bootstrap file cli.py
+    - [x] partial parse to determine command
         - use directory config for available commands
     - [ ] dynamically import controller and view classes
     - construct controller/view objects and initiate controller code
