@@ -19,7 +19,7 @@ def main(args=None):
     # build parser to obtain command
     parser = argparse.ArgumentParser()
 
-    command_subparser = parser.add_subparsers(dest='command', metavar='<command>')
+    command_subparser = parser.add_subparsers(dest='command', metavar='<command>', required=True)
 
     # from the directory config, add commands
     commands = dict()
