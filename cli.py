@@ -19,21 +19,21 @@ def main(args=None):
     # build parser to obtain command
     parser = argparse.ArgumentParser()
 
-    commands = parser.add_subparsers(dest='command', metavar='<command>')
+    command_subparser = parser.add_subparsers(dest='command', metavar='<command>')
 
     # from the directory config, add commands
-    controller_parsers = dict()
+    commands = dict()
     for directory in directoryconfig.DIRECTORIES:
         # remove help flag as we won't have controller arguments' help strings yet
-        command_parser = commands.add_parser(directory.command, help=directory.help, add_help=False)
+        command_parser = command_subparser.add_parser(directory.command, help=directory.help, add_help=False)
 
-        # track parsers under command name
-        controller_parsers[directory.command] = command_parser
+        # track directories and parsers under command name
+        commands[directory.command] = (directory, command_parser)
 
     namespace, extra_args = parser.parse_known_args(args)
 
     # attempt to import the parsed command
-    directory = directoryconfig.DIRECTORIES[namespace.command]
+    directory, command_parser = commands[namespace.command]
     try:
         controller_module = importlib.import_module('.' + directory.controller_module_name(), 'controllers')
         view_module = importlib.import_module('.' + directory.view_module_name(), 'views')
@@ -56,8 +56,7 @@ def main(args=None):
         parser.error(error)
         return
 
-    # retrieve the related command parser and add back help flag
-    command_parser = controller_parsers[namespace.command]
+    # add back help flag
     command_parser.add_argument('-h', '--help', action='help')
 
     # construct view/controller and run controller code
