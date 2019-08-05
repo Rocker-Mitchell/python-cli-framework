@@ -25,7 +25,7 @@ def main(args=None):
     controller_parsers = dict()
     for directory in directoryconfig.DIRECTORIES:
         # remove help flag as we won't have controller arguments' help strings yet
-        command_parser = commands.add_parser(directory.command, add_help=False)
+        command_parser = commands.add_parser(directory.command, help=directory.help, add_help=False)
 
         # track parsers under command name
         controller_parsers[directory.command] = command_parser

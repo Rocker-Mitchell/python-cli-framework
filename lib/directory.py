@@ -6,13 +6,15 @@
 class Directory:
     """A container for directory information."""
 
-    def __init__(self, command):
+    def __init__(self, command, help):
         """Initialize object.
 
         Args:
             command (str): The name of the command.
+            help (str): The help string for the command.
         """
         self.command = command
+        self.help = help
 
     def controller_module_name(self):
         """Get the command's controller module name.

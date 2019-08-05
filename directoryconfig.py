@@ -8,5 +8,5 @@ import lib.directory as directory
 # Constants
 
 DIRECTORIES = [
-    directory.Directory('example')
+    directory.Directory('example', 'example command')
 ]
