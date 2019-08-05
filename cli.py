@@ -68,5 +68,5 @@ def main(args=None):
 
 # Script
 
-if __name__ is '__main__':
+if __name__ == '__main__':
     main()
