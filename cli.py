@@ -57,7 +57,7 @@ def main(args=None):
         return
 
     # add back help flag
-    command_parser.add_argument('-h', '--help', action='help')
+    command_parser.add_argument('-h', '--help', action='help', help='show this help message and exit')
 
     # construct view/controller and run controller code
     view = view_class()
