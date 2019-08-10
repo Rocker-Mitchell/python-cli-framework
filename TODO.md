@@ -10,7 +10,7 @@
     - [x] view base class
         - template for subclass views
         - method to set attributes used in view
-    - [ ] params base class
+    - [x] params base class
         - template for subclass param parsers
         - handle argument parsing, return params
 

@@ -10,20 +10,14 @@ import lib.controller as controller
 class ExampleController(controller.Controller):
     """Controller for example command."""
 
-    def main(self, args):
+    def main(self, params):
         """Run example command code.
 
         Args:
-            args (list[str]): A list of argument strings.
+            params (argparse.Namespace): The parsed params.
         """
-        # add commands to parser
-        self.parser.add_argument('--foo', action='store_true', help='foo flag')
-        self.parser.add_argument('bar', help='bar parameter')
-
-        namespace = self.parser.parse_args(args)
-
         # update view with the parsed attributes
-        self.view.set_attr('foo', namespace.foo)
-        self.view.set_attr('bar', namespace.bar)
+        self.view.set_attr('foo', params.foo)
+        self.view.set_attr('bar', params.bar)
 
         self.view.print()

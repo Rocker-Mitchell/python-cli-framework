@@ -35,6 +35,7 @@ def main(args=None):
     # attempt to import the parsed command
     directory, command_parser = commands[namespace.command]
     try:
+        params_module = importlib.import_module('paramparsers.' + directory.params_module_name())
         controller_module = importlib.import_module('controllers.' + directory.controller_module_name())
         view_module = importlib.import_module('views.' + directory.view_module_name())
     except ModuleNotFoundError:
@@ -46,6 +47,7 @@ def main(args=None):
 
     # try to import classes
     try:
+        params_class = getattr(params_module, directory.params_class_name())
         controller_class = getattr(controller_module, directory.controller_class_name())
         view_class = getattr(view_module, directory.view_class_name())
     except AttributeError:
@@ -59,10 +61,14 @@ def main(args=None):
     # add back help flag
     command_parser.add_argument('-h', '--help', action='help', help='show this help message and exit')
 
+    # parse params
+    params = params_class(command_parser)
+    parsed_params = params.parse_args(extra_args)
+
     # construct view/controller and run controller code
     view = view_class()
-    controller = controller_class(command_parser, view)
-    controller.main(extra_args)
+    controller = controller_class(view)
+    controller.main(parsed_params)
 
 
 # Script

@@ -14,6 +14,22 @@ class Directory:
         self.command = command
         self.help = help
 
+    def params_module_name(self):
+        """Get the command's param parser module name.
+
+        Returns:
+            str: The formatted name.
+        """
+        return self.command + 'params'
+
+    def params_class_name(self):
+        """Get the command's param parser class name.
+
+        Returns:
+            str: The formatted name.
+        """
+        return self.command.capitalize() + 'Params'
+
     def controller_module_name(self):
         """Get the command's controller module name.
 
