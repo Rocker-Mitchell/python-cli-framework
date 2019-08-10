@@ -10,8 +10,9 @@
     - [x] view base class
         - template for subclass views
         - method to set attributes used in view
-    - [ ] parser base class
-        - template for subclass parsers
+    - [ ] params base class
+        - template for subclass param parsers
+        - handle argument parsing, return params
 
 - [x] config file
     - holding list of directory objects, how to access command modules
