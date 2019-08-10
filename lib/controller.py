@@ -1,8 +1,6 @@
 """controller.py - Class definition for controllers."""
 
 
-# Class
-
 class Controller:
     """A base implementation and template for controller subclasses."""
 

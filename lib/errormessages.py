@@ -1,6 +1,5 @@
 """errormessages.py - Functions to format error messages for parser errors."""
 
-# Functions
 
 def attr_error(attribute, message, value=None, hint=None):
     """Format an error string for parser errors.

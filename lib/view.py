@@ -1,8 +1,6 @@
 """view.py - Class definition for views."""
 
 
-# Class
-
 class View:
     """A base implementation for view subclasses."""
 

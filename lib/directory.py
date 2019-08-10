@@ -1,8 +1,6 @@
 """directory.py - Class definition for directory entries."""
 
 
-# Class
-
 class Directory:
     """A container for directory information."""
 
