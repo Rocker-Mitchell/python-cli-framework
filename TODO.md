@@ -16,7 +16,7 @@
 
 - [x] config file
     - holding list of directory objects, how to access command modules
-    - [ ] rename from directory.py for clarity of use
+    - [x] rename from directoryconfig.py for clarity of use; config for cli 
 
 - [x] bootstrap file cli.py
     - [x] partial parse to determine command

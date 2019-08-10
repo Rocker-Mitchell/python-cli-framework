@@ -5,7 +5,7 @@
 import argparse
 import importlib
 import lib.errormessages as errormessages
-import directoryconfig
+import cliconfig
 
 
 # Functions
@@ -19,11 +19,12 @@ def main(args=None):
     # build parser to obtain command
     parser = argparse.ArgumentParser()
 
-    command_subparser = parser.add_subparsers(dest='command', metavar='<command>', required=True)
+    command_subparser = parser.add_subparsers(dest='command', metavar=cliconfig.METAVAR, required=True,
+                                              help=cliconfig.HELP)
 
     # from the directory config, add commands
     commands = dict()
-    for directory in directoryconfig.DIRECTORIES:
+    for directory in cliconfig.DIRECTORIES:
         # remove help flag as we won't have controller arguments' help strings yet
         command_parser = command_subparser.add_parser(directory.command, help=directory.help, add_help=False)
 
