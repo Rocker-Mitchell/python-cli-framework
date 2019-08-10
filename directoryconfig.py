@@ -10,3 +10,4 @@ import lib.directory as directory
 DIRECTORIES = [
     directory.Directory('example', 'example command')
 ]
+"""Directory objects for configured commands."""

@@ -58,6 +58,6 @@ class Directory:
         """Get the command's view class name.
 
         Returns:
-            str: The formatted string.
+            str: The formatted name.
         """
         return self.command.capitalize() + 'View'
