@@ -25,5 +25,5 @@
     - construct command objects and initiate controller code
     
 - [x] readme file
-    - [ ] summary
-    - [ ] how to use
+    - [x] summary
+    - [x] how to use
