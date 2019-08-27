@@ -5,7 +5,16 @@
 import argparse
 import importlib
 import lib.errormessages as errormessages
-import cliconfig
+import commands
+
+
+# Constants
+
+METAVAR = '<command>'
+"""How command argument shows in usage help."""
+
+HELP = 'the command to run'
+"""Description of the command supbarser (METAVAR) in help."""
 
 
 # Functions
@@ -19,22 +28,21 @@ def main(args=None):
     # build parser to obtain command
     parser = argparse.ArgumentParser()
 
-    command_subparser = parser.add_subparsers(dest='command', metavar=cliconfig.METAVAR, required=True,
-                                              help=cliconfig.HELP)
+    command_subparser = parser.add_subparsers(dest='command', metavar=METAVAR, required=True, help=HELP)
 
-    # from the directory config, add commands
-    commands = dict()
-    for directory in cliconfig.DIRECTORIES:
+    # from the command config, build command parsers
+    command_dir_parser = dict()
+    for directory in commands.DIRECTORIES:
         # remove help flag as we won't have controller arguments' help strings yet
         command_parser = command_subparser.add_parser(directory.command, help=directory.help, add_help=False)
 
-        # track directories and parsers under command name
-        commands[directory.command] = (directory, command_parser)
+        # track directories and parsers by command name
+        command_dir_parser[directory.command] = (directory, command_parser)
 
     namespace, extra_args = parser.parse_known_args(args)
 
     # attempt to import the parsed command
-    directory, command_parser = commands[namespace.command]
+    directory, command_parser = command_dir_parser[namespace.command]
     try:
         params_module = importlib.import_module('paramparsers.' + directory.params_module_name())
         controller_module = importlib.import_module('controllers.' + directory.controller_module_name())
