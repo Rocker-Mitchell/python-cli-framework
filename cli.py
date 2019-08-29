@@ -4,7 +4,6 @@
 
 import argparse
 import importlib
-import lib.errormessages as errormessages
 import commands
 
 
@@ -48,9 +47,9 @@ def main(args=None):
         controller_module = importlib.import_module('controllers.' + directory.controller_module_name())
         view_module = importlib.import_module('views.' + directory.view_module_name())
     except ModuleNotFoundError:
-        error = errormessages.attr_error('<command>', 'could not import modules for command', namespace.command,
-                                         "the module files may not have been created, or the module names don't match "
-                                         "what was expected")
+        error = attr_error_message(METAVAR, 'could not import modules for command', namespace.command,
+                                   "the module files may not have been created, or the module names don't match what "
+                                   "was expected")
         parser.error(error)
         return
 
@@ -60,10 +59,9 @@ def main(args=None):
         controller_class = getattr(controller_module, directory.controller_class_name())
         view_class = getattr(view_module, directory.view_class_name())
     except AttributeError:
-        error = errormessages.attr_error('<command>', 'could not load classes from modules for command',
-                                         namespace.command,
-                                         "the code may not have been implemented, or the class names don't match what "
-                                         "was expected")
+        error = attr_error_message(METAVAR, 'could not load classes from modules for command', namespace.command,
+                                   "the code may not have been implemented, or the class names don't match what was "
+                                   "expected")
         parser.error(error)
         return
 
@@ -78,6 +76,30 @@ def main(args=None):
     view = view_class()
     controller = controller_class(view)
     controller.main(parsed_params)
+
+
+def attr_error_message(attribute, message, value=None, hint=None):
+    """Format an error message for parser errors.
+
+    The string format will look like:
+    'attribute [attribute]: [message]: [value] ([hint])'
+
+    Args:
+        attribute (str): The attribute causing the error.
+        message (str): The error message.
+        value: The value of the attribute, which will be formatted with repr(value). Defaults to None to not add to the
+            formatted string.
+        hint (str): The hint for the error. Defaults to None to not add to the formatted string.
+    """
+    message = 'attribute ' + attribute + ': ' + message
+
+    if value is not None:
+        message += ': ' + repr(value)
+
+    if hint is not None:
+        message += ' (' + hint + ')'
+
+    return message
 
 
 # Script
