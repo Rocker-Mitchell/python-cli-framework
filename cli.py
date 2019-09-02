@@ -13,7 +13,7 @@ METAVAR = '<command>'
 """How command argument shows in usage help."""
 
 HELP = 'the command to run'
-"""Description of the command supbarser (METAVAR) in help."""
+"""Description of the command subparser (METAVAR) in help."""
 
 
 # Functions
