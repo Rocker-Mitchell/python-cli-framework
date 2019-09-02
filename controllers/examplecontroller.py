@@ -2,12 +2,12 @@
 
 # Imports
 
-import lib.controller as controller
+from pvc import Controller
 
 
 # Controller
 
-class ExampleController(controller.Controller):
+class ExampleController(Controller):
     """Controller for example command."""
 
     def main(self, params):

@@ -2,12 +2,12 @@
 
 # Imports
 
-import lib.params as params
+from pvc import ParamParser
 
 
 # Params
 
-class ExampleParams(params.Params):
+class ExampleParams(ParamParser):
     """Parameter parser for example command."""
 
     def parse_args(self, args):

@@ -2,12 +2,12 @@
 
 # Imports
 
-import lib.view as view
+from pvc import View
 
 
 # View
 
-class ExampleView(view.View):
+class ExampleView(View):
     """View for example command."""
 
     # attributes
