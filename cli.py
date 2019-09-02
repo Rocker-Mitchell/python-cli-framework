@@ -15,6 +15,15 @@ METAVAR = '<command>'
 HELP = 'the command to run'
 """Description of the command subparser (METAVAR) in help."""
 
+PARSER_PACKAGE = 'paramparsers'
+"""The package containing command parameter parsers."""
+
+VIEW_PACKAGE = 'views'
+"""The package containing command views."""
+
+CONTROLLER_PACKAGE = 'controllers'
+"""The package containing command controllers."""
+
 
 # Functions
 
@@ -44,9 +53,9 @@ def main(args=None):
     # attempt to import the parsed command
     directory, command_parser = command_dir_parser[namespace.command]
     try:
-        params_module = importlib.import_module('paramparsers.' + directory.params_module_name())
-        controller_module = importlib.import_module('controllers.' + directory.controller_module_name())
-        view_module = importlib.import_module('views.' + directory.view_module_name())
+        params_module = importlib.import_module(PARSER_PACKAGE + '.' + directory.params_module_name())
+        controller_module = importlib.import_module(CONTROLLER_PACKAGE + '.' + directory.controller_module_name())
+        view_module = importlib.import_module(VIEW_PACKAGE + '.' + directory.view_module_name())
     except ModuleNotFoundError:
         error = attr_error_message(METAVAR, 'could not import modules for command', namespace.command,
                                    "the module files may not have been created, or the module names don't match what "
