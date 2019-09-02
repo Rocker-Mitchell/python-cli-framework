@@ -33,7 +33,8 @@ def main(args=None):
     command_dir_parser = dict()
     for directory in commands.DIRECTORIES:
         # remove help flag as we won't have controller arguments' help strings yet
-        command_parser = command_subparser.add_parser(directory.command, help=directory.help, add_help=False)
+        command_parser = command_subparser.add_parser(directory.command, help=directory.help,
+                                                      description=directory.description, add_help=False)
 
         # track directories and parsers by command name
         command_dir_parser[directory.command] = (directory, command_parser)
