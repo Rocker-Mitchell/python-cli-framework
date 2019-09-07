@@ -75,24 +75,11 @@ def main(args=None):
 
     namespace = parser.parse_args(args)
 
-    # attempt to import the parsed command
+    # load classes for the parsed command
     directory = command_dirs[namespace.command]
-    try:
-        view_class = _get_module_attr(VIEW_PACKAGE + '.' + directory.view_module_name(), directory.view_class_name())
-        controller_class = _get_module_attr(CONTROLLER_PACKAGE + '.' + directory.controller_module_name(),
-                                            directory.controller_class_name())
-    except ModuleNotFoundError:
-        error = attr_error_message(METAVAR, 'could not import modules for command', namespace.command,
-                                   "the module files may not have been created, or the module names don't match what "
-                                   "was expected")
-        parser.error(error)
-        return
-    except AttributeError:
-        error = attr_error_message(METAVAR, 'could not load classes from modules for command', namespace.command,
-                                   "the code may not have been implemented, or the class names don't match what was "
-                                   "expected")
-        parser.error(error)
-        return
+    view_class = _get_module_attr(VIEW_PACKAGE + '.' + directory.view_module_name(), directory.view_class_name())
+    controller_class = _get_module_attr(CONTROLLER_PACKAGE + '.' + directory.controller_module_name(),
+                                        directory.controller_class_name())
 
     # construct view/controller and run controller code
     view = view_class()
