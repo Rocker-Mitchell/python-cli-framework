@@ -16,19 +16,19 @@ With a command name defined, the code will load files/classes for
 parsing, processing, and printing.
 
 - Parsing arguments is handled by the
-`paramparsers.[command]params.[Command]Params` class, which extends the
-`pvc.ParamParser` class. The parser class must implement
-`parse_args(args)`, adding arguments to `self.parser` and using it to
-parse args and return results.
+`paramparsers.[command]params.[Command]Parser` class, which extends the
+`pvc.ParamParser` class (which extends `argparse.ArgumentParser`). The
+parser class must implement `build_args()`, adding arguments to `self`.
 
 - Printing is handled by the `views.[command]view.[Command]View` class,
 which extends the `pvc.View` class. The view class can flexibly
 implement functions to print, depending on needs (i.e. progress bars,
-input prompts, etc.).
+input prompts, etc.). Dynamic printing should expect attributes set on
+`self` by the controller.
 
 - Processing is handled by the
 `controllers.[command]controller.[Command]Controller` class, which
 extends the `pvc.Controller` class. The controller class must implement
-`main(params)`, taking results from the parser class, do processing,
+`main(params)`, taking results from the parser, doing processing,
 modifying the view by `self.view.set_attr(name, value)` and calling
 print functions defined in the view class.

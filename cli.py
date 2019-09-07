@@ -6,7 +6,6 @@ import argparse
 import importlib
 import commands
 
-
 # Constants
 
 METAVAR = '<command>'
@@ -27,6 +26,25 @@ CONTROLLER_PACKAGE = 'controllers'
 
 # Functions
 
+def _get_module_attr(module_name, attribute_name):
+    """Import a module and get an attribute from it.
+
+    Args:
+        module_name (str): The module name.
+        attribute_name (str): The attribute name.
+
+    Returns:
+        Any: The attribute.
+
+    Raises:
+        ModuleNotFoundError: The module could not be imported.
+        AttributeError: The attribute could not be found in the module.
+    """
+    module = importlib.import_module(module_name)
+    attribute = getattr(module, attribute_name)
+    return attribute
+
+
 def main(args=None):
     """Run main code.
 
@@ -39,35 +57,36 @@ def main(args=None):
     command_subparser = parser.add_subparsers(dest='command', metavar=METAVAR, required=True, help=HELP)
 
     # from the command config, build command parsers
-    command_dir_parser = dict()
+    command_dirs = dict()
     for directory in commands.DIRECTORIES:
-        # remove help flag as we won't have controller arguments' help strings yet
+        # load command's param parser; build arguments
+        param_parser_class = _get_module_attr(PARSER_PACKAGE + '.' + directory.params_module_name(),
+                                              directory.params_class_name())
+        param_parser = param_parser_class()
+        param_parser.build_args()
+
+        # remove help flag to not conflict with parent parser
         command_parser = command_subparser.add_parser(directory.command, help=directory.help,
-                                                      description=directory.description, add_help=False)
+                                                      description=directory.description, parents=[param_parser],
+                                                      add_help=False)
 
         # track directories and parsers by command name
-        command_dir_parser[directory.command] = (directory, command_parser)
+        command_dirs[directory.command] = directory
 
-    namespace, extra_args = parser.parse_known_args(args)
+    namespace = parser.parse_args(args)
 
     # attempt to import the parsed command
-    directory, command_parser = command_dir_parser[namespace.command]
+    directory = command_dirs[namespace.command]
     try:
-        params_module = importlib.import_module(PARSER_PACKAGE + '.' + directory.params_module_name())
-        controller_module = importlib.import_module(CONTROLLER_PACKAGE + '.' + directory.controller_module_name())
-        view_module = importlib.import_module(VIEW_PACKAGE + '.' + directory.view_module_name())
+        view_class = _get_module_attr(VIEW_PACKAGE + '.' + directory.view_module_name(), directory.view_class_name())
+        controller_class = _get_module_attr(CONTROLLER_PACKAGE + '.' + directory.controller_module_name(),
+                                            directory.controller_class_name())
     except ModuleNotFoundError:
         error = attr_error_message(METAVAR, 'could not import modules for command', namespace.command,
                                    "the module files may not have been created, or the module names don't match what "
                                    "was expected")
         parser.error(error)
         return
-
-    # try to import classes
-    try:
-        params_class = getattr(params_module, directory.params_class_name())
-        controller_class = getattr(controller_module, directory.controller_class_name())
-        view_class = getattr(view_module, directory.view_class_name())
     except AttributeError:
         error = attr_error_message(METAVAR, 'could not load classes from modules for command', namespace.command,
                                    "the code may not have been implemented, or the class names don't match what was "
@@ -75,17 +94,10 @@ def main(args=None):
         parser.error(error)
         return
 
-    # add back help flag
-    command_parser.add_argument('-h', '--help', action='help', help='show this help message and exit')
-
-    # parse params
-    params = params_class(command_parser)
-    parsed_params = params.parse_args(extra_args)
-
     # construct view/controller and run controller code
     view = view_class()
     controller = controller_class(view)
-    controller.main(parsed_params)
+    controller.main(namespace)
 
 
 def attr_error_message(attribute, message, value=None, hint=None):

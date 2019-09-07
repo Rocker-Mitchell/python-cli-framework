@@ -38,7 +38,7 @@ class Directory:
         Returns:
             str: The formatted name.
         """
-        return self.command.capitalize() + 'Params'
+        return self.command.capitalize() + 'Parser'
 
     def controller_module_name(self):
         """Get the command's controller module name.
