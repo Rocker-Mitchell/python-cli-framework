@@ -1,18 +1,36 @@
 """pvc.py - Base class definitions for parser, view, and controller objects."""
 
-# Imports
-
-import argparse
-
 
 # Classes
 
-class ParamParser(argparse.ArgumentParser):
+class ParamParser:
     """A base implementation for parameter parser subclasses."""
 
-    def build_args(self):
-        """Build arguments for parameter parsing."""
+    # TODO move command help and description strings to be members of param parser
+
+    def build_args(self, parser):
+        """Build arguments for parameter parsing.
+
+        Subclasses should add arguments as needed, with help strings defined for usage.
+
+        Args:
+            parser (argparse.ArgumentParser): A parser object used for parsing.
+        """
         raise NotImplementedError('build_args() must be implemented')
+
+    def validate(self, namespace):
+        """Validate arguments from parameter parsing.
+
+        Subclasses can implement this function to handle input requirements more complicated than can be added to the
+        parser.
+
+        Args:
+            namespace (argparse.Namespace): The namespace after parsing.
+
+        Returns:
+            str|None: An error message if validation fails.
+        """
+        pass
 
 
 class View:
@@ -48,6 +66,8 @@ class Controller:
 
     def main(self, params):
         """Run controller's main code.
+
+        Subclasses should process the params, do work, and call self.view to print to console.
 
         Args:
             params (argparse.Namespace): The parsed params.

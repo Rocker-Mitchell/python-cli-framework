@@ -1,4 +1,4 @@
-"""exampleparams.py"""
+"""exampleparams.py - An example param parser."""
 
 # Imports
 
@@ -10,8 +10,12 @@ from pvc import ParamParser
 class ExampleParser(ParamParser):
     """Parameter parser for example command."""
 
-    def build_args(self):
+    def build_args(self, parser):
         """Build arguments for example command."""
-        # add commands to parser
-        self.add_argument('--foo', action='store_true', help='foo flag')
-        self.add_argument('bar', help='bar parameter')
+        parser.add_argument('--foo', action='store_true', help='foo flag')
+        parser.add_argument('bar', help="bar parameter; pass 'error' to force parser failure")
+
+    def validate(self, namespace):
+        """Validate arguments for example command."""
+        if namespace.bar.lower() == 'error':
+            return 'A validation error occurred'

@@ -24,6 +24,8 @@ class Directory:
 
         self.description = description
 
+        # TODO generate the module and class names over implementing individual functions
+
     def params_module_name(self):
         """Get the command's param parser module name.
 

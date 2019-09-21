@@ -51,32 +51,37 @@ def main(args=None):
     Args:
         args (list[str]): List of strings to parse. Defaults to using sys.argv.
     """
-    # build parser to obtain command
+    # build parser to contain command-specific parsers
     parser = argparse.ArgumentParser()
+    command_subparsers = parser.add_subparsers(dest='command', metavar=METAVAR, required=True, help=HELP)
 
-    command_subparser = parser.add_subparsers(dest='command', metavar=METAVAR, required=True, help=HELP)
-
-    # from the command config, build command parsers
-    command_dirs = dict()
+    # from the commands config, build command parsers
+    command_dict = dict()
     for directory in commands.DIRECTORIES:
         # load command's param parser; build arguments
         param_parser_class = _get_module_attr(PARSER_PACKAGE + '.' + directory.params_module_name(),
                                               directory.params_class_name())
         param_parser = param_parser_class()
-        param_parser.build_args()
 
-        # remove help flag to not conflict with parent parser
-        command_parser = command_subparser.add_parser(directory.command, help=directory.help,
-                                                      description=directory.description, parents=[param_parser],
-                                                      add_help=False)
+        # create subparser; use param_parser to build arguments
+        command_parser = command_subparsers.add_parser(directory.command, help=directory.help,
+                                                       description=directory.description)
+        param_parser.build_args(command_parser)
 
         # track directories and parsers by command name
-        command_dirs[directory.command] = directory
+        command_dict[directory.command] = {'directory': directory, 'param': param_parser, 'parser': command_parser}
 
     namespace = parser.parse_args(args)
 
+    # run validation from param parser
+    param_parser = command_dict[namespace.command]['param']
+    error_msg = param_parser.validate(namespace)
+    if error_msg is not None:
+        command_parser = command_dict[namespace.command]['parser']
+        command_parser.error(error_msg)  # this includes the command name in the usage string
+
     # load classes for the parsed command
-    directory = command_dirs[namespace.command]
+    directory = command_dict[namespace.command]['directory']
     view_class = _get_module_attr(VIEW_PACKAGE + '.' + directory.view_module_name(), directory.view_class_name())
     controller_class = _get_module_attr(CONTROLLER_PACKAGE + '.' + directory.controller_module_name(),
                                         directory.controller_class_name())
