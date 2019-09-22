@@ -59,8 +59,8 @@ def main(args=None):
     command_dict = dict()
     for directory in commands.DIRECTORIES:
         # load command's param parser; build arguments
-        param_parser_class = _get_module_attr(PARSER_PACKAGE + '.' + directory.params_module_name(),
-                                              directory.params_class_name())
+        param_parser_class = _get_module_attr(PARSER_PACKAGE + '.' + directory.params_module_name,
+                                              directory.params_class_name)
         param_parser = param_parser_class()
 
         # create subparser; use param_parser to build arguments
@@ -72,6 +72,7 @@ def main(args=None):
         command_dict[directory.command] = {'directory': directory, 'param': param_parser, 'parser': command_parser}
 
     namespace = parser.parse_args(args)
+    # TODO unrecognized arguments are erroring from main parser rather than the command parser
 
     # run validation from param parser
     param_parser = command_dict[namespace.command]['param']
@@ -82,9 +83,9 @@ def main(args=None):
 
     # load classes for the parsed command
     directory = command_dict[namespace.command]['directory']
-    view_class = _get_module_attr(VIEW_PACKAGE + '.' + directory.view_module_name(), directory.view_class_name())
-    controller_class = _get_module_attr(CONTROLLER_PACKAGE + '.' + directory.controller_module_name(),
-                                        directory.controller_class_name())
+    view_class = _get_module_attr(VIEW_PACKAGE + '.' + directory.view_module_name, directory.view_class_name)
+    controller_class = _get_module_attr(CONTROLLER_PACKAGE + '.' + directory.controller_module_name,
+                                        directory.controller_class_name)
 
     # construct view/controller and run controller code
     view = view_class()
