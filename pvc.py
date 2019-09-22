@@ -6,7 +6,23 @@
 class ParamParser:
     """A base implementation for parameter parser subclasses."""
 
-    # TODO move command help and description strings to be members of param parser
+    help = None
+    """str: The help string when viewing the available commands.
+    
+    Defaults to None. Subclasses can set this value as desired.
+    """
+
+    description = None
+    """str: The description string when viewing the command help.
+    
+    Defaults to None. Subclasses can set this value as desired.
+    """
+
+    epilog = None
+    """str: The epilog string when viewing the command help.
+    
+    Defaults to None. Subclasses can set this value as desired.
+    """
 
     def build_args(self, parser):
         """Build arguments for parameter parsing.

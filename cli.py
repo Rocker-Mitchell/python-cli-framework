@@ -64,8 +64,8 @@ def main(args=None):
         param_parser = param_parser_class()
 
         # create subparser; use param_parser to build arguments
-        command_parser = command_subparsers.add_parser(directory.command, help=directory.help,
-                                                       description=directory.description)
+        command_parser = command_subparsers.add_parser(directory.command, help=param_parser.help,
+                                                       description=param_parser.description, epilog=param_parser.epilog)
         param_parser.build_args(command_parser)
 
         # track directories and parsers by command name

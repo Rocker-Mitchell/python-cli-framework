@@ -10,6 +10,8 @@ from pvc import ParamParser
 class ExampleParser(ParamParser):
     """Parameter parser for example command."""
 
+    description = 'An example command to demonstrate how to use the framework.'
+
     def build_args(self, parser):
         """Build arguments for example command."""
         parser.add_argument('--foo', action='store_true', help='foo flag')
